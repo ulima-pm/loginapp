@@ -1,5 +1,6 @@
 package pe.edu.ulima.loginapp;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -11,6 +12,9 @@ import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity
         implements View.OnClickListener, View.OnLongClickListener{
+
+    public static final int COD_REQ = 1000;
+
     EditText eteUsername, etePassword;
 
     @Override
@@ -41,7 +45,16 @@ public class MainActivity extends AppCompatActivity
                     etePassword.getText().toString()
             );
             if (login){
-                Toast.makeText(this, "Login correcto", Toast.LENGTH_LONG).show();
+                Intent intent = new Intent();
+                intent.setClass(this, ActivityDestino.class);
+                Bundle data = new Bundle();
+                data.putString(
+                        "NOMBRE_USUARIO",
+                        eteUsername.getText().toString()
+                );
+                data.putInt("NUMERO", 10);
+                intent.putExtras(data);
+                startActivityForResult(intent, COD_REQ);
             }else{
                 Toast.makeText(this, "Error en login", Toast.LENGTH_LONG).show();
             }
@@ -57,5 +70,15 @@ public class MainActivity extends AppCompatActivity
     public boolean onLongClick(View view) {
         finish();
         return false;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode,
+                                    int resultCode,
+                                    Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == COD_REQ){
+            int valorEntero = data.getIntExtra("VALOR", 0);
+        }
     }
 }
